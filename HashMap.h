@@ -18,7 +18,7 @@ public:
 		mElementsInserted = 0;
 		for(unsigned int i =0; i < size; ++i)
 		{
-			mData.push_back(std::make_pair("", NULL));
+			mData.push_back(std::make_pair("", nullptr));
 		}
 	}
 
@@ -35,7 +35,7 @@ public:
 		{
 			++mElementsInserted;
 			mData[pos].first = key;
-			mData[pos].second = value;
+			mData[pos].second = &value;
 			return true;
 		}
 		else
@@ -45,13 +45,13 @@ public:
 			{
 				if(mData[pos].first == key) //if it is the same
 				{
-					mData[pos].second = value;
+					mData[pos].second = &value;
 				}
 				else // finds empty position
 				{
 					++mElementsInserted;
 					mData[pos].first = key;
-					mData[pos].second = value;
+					mData[pos].second = &value;
 				}
 				mLoadFactor = mElementsInserted/mSize;
 				return true;
@@ -70,7 +70,7 @@ public:
 		size_t pos = str_hash(key)%mSize;
 		if(mData[pos].first == key)
 		{
-			return mData[pos].second;
+			return *mData[pos].second;
 		}
 		else
 		{
@@ -79,7 +79,7 @@ public:
 			{
 				if(mData[pos].first == key) //if it is the same
 				{
-					return mData[pos].second;
+					return *mData[pos].second;
 				}
 				else
 				{
@@ -99,9 +99,9 @@ public:
 		size_t pos = str_hash(key)%mSize;
 		if(mData[pos].first == key)
 		{
-			V temp = mData[pos].second;
+			V temp = *mData[pos].second;
 			mData[pos].first = "";
-			mData[pos].second = NULL;
+			mData[pos].second = nullptr;
 			--mElementsInserted;
 			mLoadFactor = mElementsInserted/mSize;
 			return temp;
@@ -113,9 +113,9 @@ public:
 			{
 				if(mData[pos].first == key) //if it is the same
 				{
-					V temp = mData[pos].second;
+					V temp = *mData[pos].second;
 					mData[pos].first = "";
-					mData[pos].second = NULL;
+					mData[pos].second = nullptr;
 					--mElementsInserted;
 					mLoadFactor = mElementsInserted/mSize;
 					return temp;
@@ -138,7 +138,7 @@ public:
 	}
 
 private:
-	std::vector<std::pair<std::string, V> > mData;
+	std::vector<std::pair<std::string, V*> > mData;
 	int mSize;
 	float mLoadFactor;
 	float mElementsInserted;
