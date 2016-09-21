@@ -27,7 +27,7 @@ public:
 
 	}
 
-	bool set(std::string key, V value)
+	bool set(std::string key, V& value)
 	{
 		std::hash<std::string> str_hash;
 		size_t pos = str_hash(key) % mSize;
@@ -36,6 +36,7 @@ public:
 			++mElementsInserted;
 			mData[pos].first = key;
 			mData[pos].second = &value;
+			mLoadFactor = mElementsInserted/mSize;
 			return true;
 		}
 		else
@@ -70,7 +71,7 @@ public:
 		size_t pos = str_hash(key)%mSize;
 		if(mData[pos].first == key)
 		{
-			return *mData[pos].second;
+			return *(mData[pos].second);
 		}
 		else
 		{
@@ -79,7 +80,7 @@ public:
 			{
 				if(mData[pos].first == key) //if it is the same
 				{
-					return *mData[pos].second;
+					return *(mData[pos].second);
 				}
 				else
 				{
@@ -113,7 +114,7 @@ public:
 			{
 				if(mData[pos].first == key) //if it is the same
 				{
-					V temp = *mData[pos].second;
+					V temp = *(mData[pos].second);
 					mData[pos].first = "";
 					mData[pos].second = nullptr;
 					--mElementsInserted;
@@ -159,3 +160,8 @@ private:
 		return true;
 	}
 };
+
+
+
+
+
